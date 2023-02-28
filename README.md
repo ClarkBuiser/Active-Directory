@@ -237,4 +237,7 @@ This tutorial outlines the implementation of on-premises Active Directory within
 <img src="images/img1.png" width="1000">
 
    <img src="images/img1.png" width="500"/>
+   
+   
+<img src="images/img3.png" >
 
