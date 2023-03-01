@@ -25,7 +25,7 @@
 - Create an Admin and Normal User Account in AD
 - Join Client1 (Windows 10 VM) to domain (clarkbuiser.com)
 - Run Powershell script that will automatically create hundreds of users
-- Create another VM and install Windows 10 and connect to the domain controller then log in to damain account.
+- Create another VM and install Windows 10 and connect to the domain controller then log in to domain account.
 
 ## Deployment and Configuration Steps
 
