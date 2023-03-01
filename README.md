@@ -7,7 +7,7 @@
 
 ## Environments and Technologies Used
 
-- VirtualBox
+- Oracle VM VirtualBox
 - Active Directory Domain Services
 - PowerShell
 
