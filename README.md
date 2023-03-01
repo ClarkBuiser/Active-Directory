@@ -73,6 +73,7 @@ Install VirtualBox on host PC.
 - *Right click Clark Buiser user acct > protperties > member of > add > enter the object names... = domain admins > Check Names > ok*
 <img src="images/img43.png" >
 - *Sign Out Windows*
+
 - *Log in > other user > a-cbuiser > enter password*
 <img src="images/img44.png" >
 
