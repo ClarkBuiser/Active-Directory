@@ -1,243 +1,118 @@
+
 <p align="center">
 <img src="https://i.imgur.com/pU5A58S.png" height="40%" width="70%"alt="Microsoft Active Directory Logo"/>
 </p>
 
-<h1>Configuring Active Directory (On-Premises) Within VirtualBox VM.</h1>
-This tutorial outlines the implementation of on-premises Active Directory within VirtualBox VM.<br />
 
+<img src="images/ad.png" >
 
-<!-- <h2>Video Demonstration</h2>
+# Configuring Active Directory (On-Premises) Within VirtualBox VM.
+###### This tutorial outlines the implementation of on-premises Active Directory within VirtualBox VM.
 
-- ### [YouTube: How to Deploy on-premises Active Directory within Azure Compute](https://www.youtube.com) -->
+## Environments and Technologies Used
 
-<h2>Environments and Technologies Used</h2>
-
-- Microsoft Azure (Virtual Machines/Compute)
-- Remote Desktop
+- VirtualBox
 - Active Directory Domain Services
 - PowerShell
 
-<h2>Operating Systems Used </h2>
+## Operating Systems Used
 
-- Windows Server 2022
+- Windows Server 2019
 - Windows 10 (21H2)
 
-<h2>High-Level Deployment and Configuration Steps</h2>
+## High-Level Deployment and Configuration Steps
 
-- Create Resources
+- Install VirtualBox VM
+- Install Windows Server 2019
+- Install and configure Active Directory
 - Ensure Connectivity between the client and Domain Controller
-- Install Active Directory
 - Create an Admin and Normal User Account in AD
-- Join Client-1 to your domain (myadproject.com)
-- Setup Remote Desktop for non-administrative users on Client-1
-- Create a manu additional users and attempt to log into client-1 with one of the users
+- Join Client1 (Windows 10 VM) to domain (clarkbuiser.com)
+- Run Powershell script that will automatically create hundreds of users
+- Create another VM and install Windows 10 and connect to the domain controller then log in to damain account.
 
-<h2>Deployment and Configuration Steps</h2>
-<br />
-<br />
-<h3 align="center">Setup Resources in Azure</h3>
-<br />
-<p>
-  Create the Domain Controller VM (Windows Server 2022) named “DC-1”:
-</p>
-<p>
-  <img src="https://i.imgur.com/gaAzjvb.png" height="75%" width="100%" alt="resource group"/>
-  <img src="https://i.imgur.com/hubTfey.png" height="75%" width="100%" alt="vm ms server"/>
-</p>
-<p>
-  Create the Client VM (Windows 10) named “Client-1”. Use the same Resource Group and Vnet that was created in previous step:
-</p>
-<p>
-  <img src="https://i.imgur.com/XyEmv8f.png" height="75%" width="100%" alt="vm windows"/>
-</p>
-<p>
-  Set Domain Controller’s NIC Private IP address to be static:
-</p>
-<p>
-  <img src="https://i.imgur.com/KHU9kC4.png" height="75%" width="100%" alt="static ip"/>
-</p>
-<p>
-  Ensure that both VMs are in the same Vnet (you can check the topology with Network Watcher):
-</p>
-<p>
-  <img src="https://i.imgur.com/rFpHLdQ.png" height="75%" width="100%" alt="topology"/>
-</p>
-<br />
-<br />
-<h3 align="center">Ensure Connectivity between the client and Domain Controller</h3>
-<br />
-<p>
-  Login to Client-1 with Remote Desktop and ping DC-1’s private IP address with ping -t <ip address> (perpetual ping):
-</p>
-<p>
-  <img src="https://i.imgur.com/bnPM9tX.png" height="75%" width="100%" alt="perpetual ping"/>
-</p>
-<p>
-  Login to the Domain Controller and enable ICMPv4 in on the local windows firewall:
-</p>
-<p>
-  <img src="https://i.imgur.com/ZpPyEkt.png" height="75%" width="100%" alt="enable ICMPv4"/>
-</p>
-<p>
-  Check back at Client-1 to see the ping succeed:
-</p>
-<p>
-  <img src="https://i.imgur.com/8o3OfjY.png" height="75%" width="100%" alt="ping success"/>
-</p>
-<br />
-<br />
-<h3 align="center">Install Active Directory</h3>
-<br />
-<p>
-  Login to DC-1 and install Active Directory Domain Services:
-</p>
-<p>
-  <img src="https://i.imgur.com/A1V9XJ5.png" height="75%" width="100%" alt="active directory install"/>
-</p>
-<p>
-  Promote as a Domain Controller:
-</p>
-<p>
-  <img src="https://i.imgur.com/zi15fw4.png" height="75%" width="100%" alt="domain controller promotion"/>
-</p>
-<p>
-  Setup a new forest as myactivedirectory.com (can be anything, just remember what it is - I ultimately did set it up as myadproject.com which you'll see in the next pic):
-</p>
-<p>
-  <img src="https://i.imgur.com/DCFUVrM.png" height="75%" width="100%" alt="set new forest"/>
-</p>
-<p>
-  Restart and then log back into DC-1 as user: myadproject.com\labuser:
-</p>
-<p>
-  <img src="https://i.imgur.com/7UakWMQ.png" height="75%" width="100%" alt="fqdn login"/>
-</p>
-<br />
-<br />
-<h3 align="center">Create an Admin and Normal User Account in AD</h3>
-<br />
-<p>
-  In Active Directory Users and Computers (ADUC), create an Organizational Unit (OU) called “_EMPLOYEES” and another one called "_ADMINS":
-</p>
-<p>
-  <img src="https://i.imgur.com/cYmv0r7.png" height="75%" width="100%" alt="organizational unit"/>
-  <img src="https://i.imgur.com/v02CBPI.png" height="75%" width="100%" alt="organizational unit"/>
-</p>
-<p>
-  Create a new employee named “Jane Doe” with the username of “jane_admin”:
-</p>
-<p>
-  <img src="https://i.imgur.com/h546E6L.png" height="75%" width="100%" alt="admin creation"/>
-</p>
-<p>
-  Add jane_admin to the “Domain Admins” Security Group:
-</p>
-<p>
-  <img src="https://i.imgur.com/mnLwTgq.png" height="75%" width="100%" alt="security group"/>
-</p>
-<p>  
-  Log out/close the Remote Desktop connection to DC-1 and log back in as “myadproject.com\jane_admin”. Use jane_admin as your admin account from now on:
-</p>
-<p>
-  <img src="https://i.imgur.com/xWZ4Kol.png" height="75%" width="100%" alt="admin login"/>
-</p>
-<br />
-<br />
-<h3 align="center">Join Client-1 to your domain (myadproject.com)</h3>
-<br />
-<p>
-  From the Azure Portal, set Client-1’s DNS settings to the DC’s Private IP address:
-</p>
-<p>
-  <img src="https://i.imgur.com/1KRsjI6.png" height="75%" width="100%" alt="client dns settings"/>
-</p>
-<p>
-  From the Azure Portal, restart Client-1.
-</p>
-<p>
-  Login to Client-1 (Remote Desktop) as the original local admin (labuser) and join it to the domain (computer will restart):
-</p>
-<p>
-  <img src="https://i.imgur.com/50wszcP.png" height="75%" width="100%" alt="domain joining"/>
-</p>
-<p>
-  Login to the Domain Controller (Remote Desktop) and verify Client-1 shows up in Active Directory Users and Computers (ADUC) inside the “Computers” container on the root of the domain.
-</p>
-<p>
-  Create a new OU named “_CLIENTS” and drag Client-1 into there:
-</p>
-<p>
-  <img src="https://i.imgur.com/vB1n9m0.png" height="75%" width="100%" alt="active directory client verification"/>
-</p>
-<br />
-<br />
-<h3 align="center">Setup Remote Desktop for non-administrative users on Client-1</h3>
-<br />
-<p>
-  Log into Client-1 as mydomain.com\jane_admin and open system properties.
-</p>
-<p>
-  Click “Remote Desktop”.
-</p>
-<p>
-  Allow “domain users” access to remote desktop.
-</p>
-<p>
-  You can now log into Client-1 as a normal, non-administrative user now.
-</p>
-<p>
-  Normally you’d want to do this with Group Policy that allows you to change MANY systems at once (maybe a future lab):
-</p>
-<p>
-  <img src="https://i.imgur.com/8BfpT3s.png" height="75%" width="100%" alt="remote desktop setup"/>
-</p>
-<br />
-<br />
-<h3 align="center">Create a bunch of additional users and attempt to log into client-1 with one of the users</h3>
-<br />
-<p>
-  Login to DC-1 as jane_admin
-</p>
-<p>
-  Open PowerShell_ise as an administrator.
-</p> 
-<p>  
-  Create a new File and paste the contents of this script (https://github.com/agruezo/configure-active-directory/blob/script/createUsers.ps1) into it:
-</p>
-<p>
-  <img src="https://i.imgur.com/0i8uApf.png" height="75%" width="100%" alt="create users script"/>
-</p>
-<p>
-  Run the script and observe the accounts being created:
-</p>
-<p>
-  <img src="https://i.imgur.com/6QOGzs6.png" height="75%" width="100%" alt="observe create users script"/>
-</p>
-<p>
-  When finished, open ADUC and observe the accounts in the appropriate OU and attempt to log into Client-1 with one of the accounts (take note of the password in the script):
-</p>
-<p>
-  <img src="https://i.imgur.com/ZZCfiCp.png" height="75%" width="100%" alt="employee user accounts"/>
-  <img src="https://i.imgur.com/7gBpNzN.png" height="75%" width="100%" alt="employee user selection"/>
-  <img src="https://i.imgur.com/cqsddjn.png" height="75%" width="100%" alt="employee user login"/>
-</p>
-<br />
-<br />
-<p>
-  I hope this tutorial helped you learn a little bit about network security protocols and observe traffic between virtual machines. And although I ran this on a my MacBook Air, this can be easily done on a PC without having to download a remote desktop app since Windows provides that with it's software.
-</p>
-<p>
-  And now that we're done, DON'T FORGET TO CLEAN UP YOUR AZURE ENVIRONMENT so that you don't incur unnecessary charges.
-</p>
-<p>
-  Close your Remote Desktop connection, delete the Resource Group(s) created at the beginning of this tutorial, and verify Resource Group deletion.
-</p>
+## Deployment and Configuration Steps
+
+Install VirtualBox on host PC.
+
+- *Enable Intel VMX virtualization in BIOS*
+- *Bios > Advance > CPU config >  Intel VMX virtualization > Enable*
+
+<img src="images/img1.png" >
+<img src="images/img2.png" >
+
+## Install Win Server 2019
+
+- *Virtual box > new > follow prompt*
+<img src="images/img6.png" >
+- *VM Manager > Settings > general > advanced > shared clipboard and Drag 'n Drop > bidirectional x2 > System > Processor > set parameters > network > adapter 1 > attached to: NAT > Adapter 2 > enable network adapter > Attached to:  Internal Network*
+- *Complete installation..*
+- *Install vm guest edition:  Devices > Insert Guest Addtions CD image*
+- *Explorer folder > This PC > CD Drive > VBoxWIndowsAdditions-amd64 > install.. > reboot*
+- *Setup IP Address: Open Network and Internet settings > Find Internal and External NIC > rename to LAN and WAN.*
+- *Assign static IP to LAN: 172.16.0.1 > Subnet Mask: 255 255 255 0 > Default gateway:blank > Preferred DNS: 127.0.0.1 (loopback address)*
+- *Rename PC to WinServer19*
+
+## Install Active Directory Domain Services
+- *Add roles and features > Active Directory Domain Services*
+- *Click notification flag > promote this server > Add new forest > Root domain name: clarkbuiser.com > add password > follow prompt and install > restart*
+- *Create dedicated AD Admin account: Start > administrative tools > Active Directory Users and Computers > clarkbuiser.com > new > Organization Unit > Name: _ADMINS > uncheck protection container for accidental deletion.*
+- *_Admin > new > user > user logon name: a-cbuiser*
+- *Right click Clark Buiser user acct > protperties > member of > add > enter the object names... = domain admins > Check Names > ok*
+- *Sign Out Windows*
+- *Log in > other user > a-cbuiser > enter password*
+
+## Install NAT
+- *Add roles and features > next > Server roles > Remote Access > routing > add features > next > install* 
+- *Tools > routing and remote access > WINSERVER19 local > Configure and Enable Routing and Remote Access > next > NAT > Select WAN (Internet Interface) > next > finish > check configuration settings.*
+
+## Set up DHCP server on the Domain Controller
+- *Add roles and features > DHCP server > install 
+- *Tools > DHCP > winserver19.clarkbuiser.com > IPV4 > > new scope > Name: 172.16.0.100-200 > next > Start IP address: 172.16.0.100, End IP: 172.16.0.200 Length: 24, Subnet mask: 255.255.255.0 > next > next > configure DHCP options: yes > 172.16.0.1 (gateway) > add  > parent domain: clarkbuiser.com > next > yes, i want to activate the scope > finish*
+- *winserver19.clarkbuiser.com > authorize > refresh* 
+- *Server Manager > configure this local server > IE Enhanced Security Configuration: off*
+
+
+## Create a bunch of users with Powershell:
+- *Save AD_PS-master folder (folder that contain Powershell script and text files of names of users) to Desktop*
+- *Open PowerShell ISE as Administrator*
+- *In PowerShell > Set-ExecutionPolicy Unrestricted*
+- *Change directory to Desktop: cd c:\users\a-cbuiser\desktop\AD_PS-master*
+- *ls > play*
+
+
+## Create Client Windows 10 VM
+- *VirtualBox >  New  > Name: Client1 > Win 10 > Memory: 4GB > Next >  next 
+Client1 > right click settings > advanced  Shared clipboard and Drag 'n Drop: Bidirectional 
+System > Processor > 4 CPUs*
+- *Network > Attached to: Internal Network*
+- *Double click Client1 > add > mount Win10 iso file > start > install > win10 pro > custom > next > i dont have internet > continue with limited setup*
+- *Create a win user > turn off all privacy*
+
+##Make sure internet is working on Win10 client:
+- *Open command line > ipconfig /all*
+
+## Log in to WIn Server Domain Controller:
+- *Tools > DHCP > IPV4 > server options > > right click configure options >  check Router > Ip Address : 172.16.0.1 ( Gateway)* 
+- *DHCP > right click  winserver19.clarkbuiser.com > all task > restart > check ipv4 server options*
+- *Back to win10 and run ipconfig to see if its acquiring Ip address from the DHCP server, ping google.com, ping clarkbuiser.com (domain controller)*
+- *Rename win10 PC and join the domain*
+- *System > rename this pc advance > Computer name: CLient1 > Domain:  clarkbuiser.com >  Enter user name and pass: use created user account or the admin account > restart*
+
+## Go Back to the Domain Controller:
+- *DHCP > IPV4 > Scope > Address Leases > check for DHCP leases*
+- *Start > Admin Tools > active directory users and computers > computers > check for Client1 computer*
+
+## Win10 Vitural Machine:
+- *Log in with other user credentials*
 
 
 
 
+##### I hope this tutorial helped you learn a little bit on setting up Active Directory in VirtualBox.
 
-   
-   
-<img src="images/img3.png" >
+
+
+
+<img src="images/you-picture.png" >
 
