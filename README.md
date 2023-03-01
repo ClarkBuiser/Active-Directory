@@ -89,7 +89,7 @@ Install VirtualBox on host PC.
 <img src="images/img57.png" >
 
 - *Tools > DHCP > winserver19.clarkbuiser.com > IPV4 > > new scope > Name: 172.16.0.100-200 > next > Start IP address: 172.16.0.100, End IP: 172.16.0.200 Length: 24, Subnet mask: 255.255.255.0 > next > next > configure DHCP options: yes > 172.16.0.1 (gateway) > add  > parent domain: clarkbuiser.com > next > yes, i want to activate the scope > finish*
-<img src="images61.png" >
+<img src="images/img61.png" >
 
 - *winserver19.clarkbuiser.com > authorize > refresh* 
 - *Server Manager > configure this local server > IE Enhanced Security Configuration: off*
