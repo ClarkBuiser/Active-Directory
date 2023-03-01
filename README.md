@@ -20,7 +20,7 @@
 
 - Install VirtualBox VM
 - Install Windows Server 2019
-- Install and configure Active Directory
+- Configure Active Directory
 - Ensure Connectivity between the client and Domain Controller
 - Create an Admin and Normal User Account in AD
 - Join Client1 (Windows 10 VM) to domain (clarkbuiser.com)
